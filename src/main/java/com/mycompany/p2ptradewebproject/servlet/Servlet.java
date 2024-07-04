@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -29,6 +30,14 @@ public class Servlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        Integer visitCounter = (Integer) session.getAttribute("visitCounter");
+        if (visitCounter == null) {
+            visitCounter = 1;
+        } else {
+            visitCounter++;
+        }
+        session.setAttribute("visitCounter", visitCounter);
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
@@ -38,6 +47,7 @@ public class Servlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Servlet at " + request.getContextPath() + "</h1>");
+            out.println("<p>You visited this page " + visitCounter + " times</p>");
             out.println("</body>");
             out.println("</html>");
         }
