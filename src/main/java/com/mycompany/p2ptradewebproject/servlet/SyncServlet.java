@@ -5,7 +5,8 @@
 package com.mycompany.p2ptradewebproject.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.Writer;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Andre
  */
-public class Servlet extends HttpServlet {
+public class SyncServlet extends HttpServlet {
+
+    private StringBuffer locked = new StringBuffer();
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,19 +34,36 @@ public class Servlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Servlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Servlet at " + request.getContextPath() + "</h1>");
-            out.println("<h2>Welcome</h2>");
-            out.println("<a href=\"" + request.getContextPath() + "/counter\">Counter Servlet</a>");
-            out.println("<a href=\"" + request.getContextPath() + "/sync\">Sync Servlet</a>");
-            out.println("</body>");
-            out.println("</html>");
+        try (Writer out = response.getWriter()) {
+            out.write("<!DOCTYPE html>");
+            out.write("<html>");
+            out.write("<head>");
+            out.write("<title>Servlet Sync</title>");
+            out.write("</head>");
+            out.write("<body>");
+            out.write("<h1>Servlet Servlet at " + request.getContextPath() + request.getServletPath() + "</h1>");
+            out.write("<h2>Sync Servlet</h2>");
+            out.write("<p>" + sync() + "</p>");
+            out.write("<a href=\"" + request.getContextPath() + "\">Home</a>");
+            out.write("</body>");
+            out.write("</html>");
+        }
+    }
+
+    public String sync() {
+        final String STR = "SYNCHRONIZATION";
+        synchronized (locked) {
+            try {
+                for (int i = 0; i < STR.length(); i++) {
+                    locked.append(STR.charAt(i));
+                    Thread.sleep(50);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            String result = locked.toString();
+            locked.delete(0, STR.length());
+            return result;
         }
     }
 

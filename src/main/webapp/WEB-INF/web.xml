@@ -4,9 +4,25 @@
         <servlet-name>Servlet</servlet-name>
         <servlet-class>com.mycompany.p2ptradewebproject.servlet.Servlet</servlet-class>
     </servlet>
+        <servlet>
+        <servlet-name>Counter</servlet-name>
+        <servlet-class>com.mycompany.p2ptradewebproject.servlet.CounterServlet</servlet-class>
+    </servlet>
+        <servlet>
+        <servlet-name>Sync</servlet-name>
+        <servlet-class>com.mycompany.p2ptradewebproject.servlet.SyncServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Counter</servlet-name>
+        <url-pattern>/counter</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Sync</servlet-name>
+        <url-pattern>/sync</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

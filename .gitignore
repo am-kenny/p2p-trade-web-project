@@ -2,3 +2,4 @@
 log/
 target/
 nb-configuration.xml
+/src/main/resources/database_mysql.properties

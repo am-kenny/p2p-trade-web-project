@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Andre
  */
-public class Servlet extends HttpServlet {
+public class CounterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,6 +30,7 @@ public class Servlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
+        Integer visitCounter = Counter.updateCounter(request);
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -37,10 +38,9 @@ public class Servlet extends HttpServlet {
             out.println("<title>Servlet Servlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Servlet at " + request.getContextPath() + "</h1>");
-            out.println("<h2>Welcome</h2>");
-            out.println("<a href=\"" + request.getContextPath() + "/counter\">Counter Servlet</a>");
-            out.println("<a href=\"" + request.getContextPath() + "/sync\">Sync Servlet</a>");
+            out.println("<h1>Servlet Servlet at " + request.getContextPath() + request.getServletPath() + "</h1>");
+            out.println("<p>You visited this page " + visitCounter + " times</p>");
+            out.println("<a href=\"" + request.getContextPath() + "\">Home</a>");
             out.println("</body>");
             out.println("</html>");
         }
