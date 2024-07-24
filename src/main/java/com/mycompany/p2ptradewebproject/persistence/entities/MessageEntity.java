@@ -4,28 +4,15 @@ import java.sql.Timestamp;
 
 public class MessageEntity {
     private Integer id;
-    private UserEntity user;
-    private TradeEntity trade;
+    private Integer userId;
+    private Integer tradeId;
     private String text;
     private String media;
     private Timestamp createdAt;
 
 
-    public MessageEntity(Integer id, UserEntity user, TradeEntity trade, String text, String media, Timestamp createdAt) {
-        this.id = id;
-        this.user = user;
-        this.trade = trade;
-        this.text = text;
-        this.media = media;
-        this.createdAt = createdAt;
-    }
+    public MessageEntity() {}
 
-    public MessageEntity(UserEntity user, TradeEntity trade, String text, String media) {
-        this.user = user;
-        this.trade = trade;
-        this.text = text;
-        this.media = media;
-    }
 
     public Integer getId() {
         return id;
@@ -35,20 +22,20 @@ public class MessageEntity {
         this.id = id;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public TradeEntity getTrade() {
-        return trade;
+    public Integer getTradeId() {
+        return tradeId;
     }
 
-    public void setTrade(TradeEntity trade) {
-        this.trade = trade;
+    public void setTradeId(Integer tradeId) {
+        this.tradeId = tradeId;
     }
 
     public String getText() {

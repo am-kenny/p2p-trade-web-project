@@ -10,21 +10,7 @@ public class UserVerificationEntity {
     private Boolean isBanned;
 
 
-    public UserVerificationEntity(Integer id, String name, String surname, String passportNumber, String passportPhotoReference, Boolean isBanned) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.passportNumber = passportNumber;
-        this.passportPhotoReference = passportPhotoReference;
-        this.isBanned = isBanned;
-    }
-
-    public UserVerificationEntity(String name, String surname, String passportNumber, String passportPhotoReference) {
-        this.name = name;
-        this.surname = surname;
-        this.passportNumber = passportNumber;
-        this.passportPhotoReference = passportPhotoReference;
-    }
+    public UserVerificationEntity() {}
 
 
     public Integer getId() {

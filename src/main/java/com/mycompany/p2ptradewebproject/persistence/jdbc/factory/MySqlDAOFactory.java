@@ -5,11 +5,13 @@ import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.EDatabaseType;
 import com.mycompany.p2ptradewebproject.persistence.connection.TomcatDataSource;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.*;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.*;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
 public class MySqlDAOFactory extends AbstractDAOFactory {
+
     private static MySqlDAOFactory instance = null;
     private AbstractDataSource dataSource;
 
@@ -28,52 +30,48 @@ public class MySqlDAOFactory extends AbstractDAOFactory {
         return instance;
     }
 
-    public <T> T doInTransaction(Supplier<T> operation) {
-        return dataSource.<T>doInTransaction(operation);
-    }
-
     @Override
     public AbstractDataSource getDataSource() {
         return dataSource;
     }
 
     @Override
-    public UserDAO getUserDAO() {
-        return UserDAO.getInstance(dataSource);
+    public UserDAO createUserDAO() {
+        return UserDAO.getInstance(dataSource, UserMapper.getInstance());
     }
 
     @Override
-    public UserVerificationDAO getUserVerificationDAO() {
-        return UserVerificationDAO.getInstance(dataSource);
+    public UserVerificationDAO createUserVerificationDAO() {
+        return UserVerificationDAO.getInstance(dataSource, UserVerificationMapper.getInstance());
     }
 
     @Override
-    public BankAccountDAO getBankAccountDAO() {
-        return BankAccountDAO.getInstance(dataSource);
+    public BankAccountDAO createBankAccountDAO() {
+        return BankAccountDAO.getInstance(dataSource, BankAccountMapper.getInstance());
     }
 
     @Override
-    public BankDAO getBankDAO() {
-        return BankDAO.getInstance(dataSource);
+    public BankDAO createBankDAO() {
+        return BankDAO.getInstance(dataSource, BankMapper.getInstance());
     }
 
     @Override
-    public CurrencyDAO getCurrencyDAO() {
-        return CurrencyDAO.getInstance(dataSource);
+    public CurrencyDAO createCurrencyDAO() {
+        return CurrencyDAO.getInstance(dataSource, CurrencyMapper.getInstance());
     }
 
     @Override
-    public TradeDAO getTradeDAO() {
-        return TradeDAO.getInstance(dataSource);
+    public TradeDAO createTradeDAO() {
+        return TradeDAO.getInstance(dataSource, TradeMapper.getInstance());
     }
 
     @Override
-    public MessageDAO getMessageDAO() {
-        return MessageDAO.getInstance(dataSource);
+    public MessageDAO createMessageDAO() {
+        return MessageDAO.getInstance(dataSource, MessageMapper.getInstance());
     }
 
     @Override
-    public FeedbackDAO getFeedbackDAO() {
-        return FeedbackDAO.getInstance(dataSource);
+    public FeedbackDAO createFeedbackDAO() {
+        return FeedbackDAO.getInstance(dataSource, FeedbackMapper.getInstance());
     }
 }

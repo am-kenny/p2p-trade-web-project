@@ -5,15 +5,7 @@ public class BankEntity {
     private String name;
 
 
-    public BankEntity (Integer id, String name) {
-        this.id = id;
-        this.name = name;
-
-    }
-
-    public BankEntity (String name) {
-        this.name = name;
-    }
+    public BankEntity() {}
 
 
     public Integer getId() {

@@ -5,15 +5,15 @@ public class UserEntity {
     private String username;
     private String email;
     private String password;
-    private UserVerificationEntity userVerificationEntity;
+    private Integer userVerificationId;
 
 
-    public UserEntity(Integer id, String username, String email, String password, UserVerificationEntity userVerificationEntity) {
+    public UserEntity(Integer id, String username, String email, String password, Integer userVerificationId) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.userVerificationEntity = userVerificationEntity;
+        this.userVerificationId = userVerificationId;
     }
 
     public UserEntity(String username, String email, String password) {
@@ -55,16 +55,13 @@ public class UserEntity {
     public void setPassword(String password) {
         this.password = password;
     }
-    public UserVerificationEntity getUserVerification() {
-        return userVerificationEntity;
+
+    public Integer getUserVerificationId() {
+        return userVerificationId;
     }
 
-    public UserVerificationEntity getUserVerificationEntity() {
-        return userVerificationEntity;
-    }
-
-    public void setUserVerificationEntity(UserVerificationEntity userVerificationEntity) {
-        this.userVerificationEntity = userVerificationEntity;
+    public void setUserVerificationId(Integer userVerificationId) {
+        this.userVerificationId = userVerificationId;
     }
 
 
@@ -75,7 +72,7 @@ public class UserEntity {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", userVerificationEntity=" + userVerificationEntity +
+                ", userVerificationId=" + userVerificationId +
                 '}';
     }
 }

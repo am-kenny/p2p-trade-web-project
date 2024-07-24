@@ -8,4 +8,5 @@ public interface ResultSetMapper<T> {
 
     String getQuerySelectAll();
     String getQueryCount();
+
 }

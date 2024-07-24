@@ -1,5 +1,6 @@
 package com.mycompany.p2ptradewebproject.persistence;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.EDatabaseType;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.factory.AbstractDAOFactory;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.factory.MySqlDAOFactory;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.*;
@@ -13,13 +14,13 @@ import java.util.Optional;
 public class Runner {
     public static void main(String[] args) {
         // DAO Factories
-        AbstractDAOFactory daoFactory = AbstractDAOFactory.getMySqlDAOFactory();
-        IDAOUser userDAO = daoFactory.getUserDAO();
-        IDAOCurrency currencyDAO = daoFactory.getCurrencyDAO();
-        IDAOBank bankDAO = daoFactory.getBankDAO();
-        IDAOTrade tradeDAO = daoFactory.getTradeDAO();
-        IDAOFeedback feedbackDAO = daoFactory.getFeedbackDAO();
-        IDAOMessage messageDAO = daoFactory.getMessageDAO();
+        AbstractDAOFactory daoFactory = AbstractDAOFactory.createDAOFactory(EDatabaseType.MYSQL);
+        IDAOUser userDAO = daoFactory.createUserDAO();
+        IDAOCurrency currencyDAO = daoFactory.createCurrencyDAO();
+        IDAOBank bankDAO = daoFactory.createBankDAO();
+        IDAOTrade tradeDAO = daoFactory.createTradeDAO();
+        IDAOFeedback feedbackDAO = daoFactory.createFeedbackDAO();
+        IDAOMessage messageDAO = daoFactory.createMessageDAO();
 
 //        UserEntity newUser = new UserEntity("username", "email@example.com", "12345678");
 //        userDAO.create(newUser);
@@ -55,7 +56,8 @@ public class Runner {
 
         // One transaction
         MySqlDAOFactory
-                .getMySqlDAOFactory()
+                .createDAOFactory(EDatabaseType.MYSQL)
+                .getDataSource()
                 .doInTransaction(() -> {
                     tradeRes.addAll(tradeDAO.findAll());
                     feedbackRes.addAll(feedbackDAO.findAll());
@@ -91,6 +93,8 @@ public class Runner {
         if (data instanceof List<?> resultList) {
             if (!resultList.isEmpty()) {
                 resultList.forEach(System.out::println);
+            } else {
+                System.out.println("No results");
             }
             return;
         }

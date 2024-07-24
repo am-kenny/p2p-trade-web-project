@@ -5,31 +5,20 @@ import java.util.Objects;
 public class BankAccountEntity {
     private Integer id;
     private Integer cardNumber;
-    private BankEntity bank;
-    private UserEntity user;
-    private CurrencyEntity currency;
+    private Integer bankId;
+    private Integer userId;
+    private Integer currencyId;
     private String cardholderName;
 
-    public BankAccountEntity(Integer id, Integer cardNumber, BankEntity bank, UserEntity user, CurrencyEntity currency, String cardholderName) {
-        this.id = id;
-        this.cardNumber = cardNumber;
-        this.bank = bank;
-        this.user = user;
-        this.currency = currency;
-        this.cardholderName = cardholderName;
-    }
 
-    public BankAccountEntity(Integer cardNumber, BankEntity bank, UserEntity user, CurrencyEntity currency, String cardholderName) {
-        this.cardNumber = cardNumber;
-        this.bank = bank;
-        this.user = user;
-        this.currency = currency;
-        this.cardholderName = cardholderName;
-    }
+    public BankAccountEntity() {}
+
 
     public Integer getId() {
         return id;
     }
+
+    public void setId(Integer id) {}
 
     public Integer getCardNumber() {
         return cardNumber;
@@ -39,28 +28,28 @@ public class BankAccountEntity {
         this.cardNumber = cardNumber;
     }
 
-    public BankEntity getBank() {
-        return bank;
+    public Integer getBankId() {
+        return bankId;
     }
 
-    public void setBank(BankEntity bank) {
-        this.bank = bank;
+    public void setBankId(Integer bankId) {
+        this.bankId = bankId;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public CurrencyEntity getCurrency() {
-        return currency;
+    public Integer getCurrencyId() {
+        return currencyId;
     }
 
-    public void setCurrency(CurrencyEntity currency) {
-        this.currency = currency;
+    public void setCurrencyId(Integer currencyId) {
+        this.currencyId = currencyId;
     }
 
     public String getCardholderName() {
@@ -76,9 +65,9 @@ public class BankAccountEntity {
         return "BankAccountEntity{" +
                 "id=" + id +
                 ", cardNumber=" + cardNumber +
-                ", bank=" + bank +
-                ", user=" + user +
-                ", currency=" + currency +
+                ", bankId=" + bankId +
+                ", userId=" + userId +
+                ", currencyId=" + currencyId +
                 ", cardholderName='" + cardholderName + '\'' +
                 '}';
     }
@@ -88,11 +77,11 @@ public class BankAccountEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BankAccountEntity that = (BankAccountEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(cardNumber, that.cardNumber) && Objects.equals(bank, that.bank) && Objects.equals(user, that.user) && Objects.equals(currency, that.currency) && Objects.equals(cardholderName, that.cardholderName);
+        return Objects.equals(id, that.id) && Objects.equals(cardNumber, that.cardNumber) && Objects.equals(bankId, that.bankId) && Objects.equals(userId, that.userId) && Objects.equals(currencyId, that.currencyId) && Objects.equals(cardholderName, that.cardholderName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cardNumber, bank, user, currency, cardholderName);
+        return Objects.hash(id, cardNumber, bankId, userId, currencyId, cardholderName);
     }
 }

@@ -2,8 +2,10 @@ package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
 import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
+import com.mycompany.p2ptradewebproject.persistence.entities.UserEntity;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOBank;
 import com.mycompany.p2ptradewebproject.persistence.entities.BankEntity;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.ResultSetMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,62 +13,31 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-public class BankDAO implements IDAOBank {
+public class BankDAO extends GenericDAO<BankEntity> implements IDAOBank {
+
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static BankDAO instance = null;
+    private AbstractDataSource dataSource;
+    private ResultSetMapper<BankEntity> mapper;
 
     private static final String INSERT_BANK = "INSERT INTO bank(name) VALUES(?)";
-    private static final String SELECT_BANK = "SELECT * FROM bank WHERE id=?";
-    private static final String SELECT_ALL_BANKS = "SELECT * FROM bank";
     private static final String UPDATE_BANK = "UPDATE bank SET name=? WHERE id=?";
     private static final String DELETE_BANK = "DELETE FROM bank WHERE id=?";
 
-    private AbstractDataSource dataSource;
 
-
-    private BankDAO(AbstractDataSource dataSource) {
+    private BankDAO(AbstractDataSource dataSource, ResultSetMapper<BankEntity> mapper) {
+        super(dataSource, mapper);
         this.dataSource = dataSource;
+        this.mapper = mapper;
     }
 
-    public static synchronized BankDAO getInstance(AbstractDataSource dataSource) {
+    public static synchronized BankDAO getInstance(AbstractDataSource dataSource, ResultSetMapper<BankEntity> mapper) {
         if (instance == null) {
-            instance = new BankDAO(dataSource);
+            instance = new BankDAO(dataSource, mapper);
         }
         return instance;
     }
 
-    @Override
-    public Optional<BankEntity> findById(long id) {
-        Connection connection = dataSource.getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(SELECT_BANK)) {
-            ps.setLong(1, id);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.of(mapResultSetToBankEntity(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public List<BankEntity> findAll() {
-        List<BankEntity> result = new ArrayList<>();
-        Connection connection = dataSource.getConnection();
-        try (
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SELECT_ALL_BANKS)
-        ) {
-            while (resultSet.next()) {
-                result.add(mapResultSetToBankEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 
     @Override
     public void create(BankEntity bankEntity) {
@@ -75,7 +46,7 @@ public class BankDAO implements IDAOBank {
             ps.setString(1, bankEntity.getName());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -87,7 +58,7 @@ public class BankDAO implements IDAOBank {
             ps.setLong(3, bankEntity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -98,14 +69,8 @@ public class BankDAO implements IDAOBank {
             ps.setLong(1, bankEntity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
-    private BankEntity mapResultSetToBankEntity(ResultSet resultSet) throws SQLException {
-        return new BankEntity(
-                resultSet.getInt("id"),
-                resultSet.getString("name")
-        );
-    }
 }

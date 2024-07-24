@@ -2,8 +2,11 @@ package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
 import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
+import com.mycompany.p2ptradewebproject.persistence.entities.BankEntity;
+import com.mycompany.p2ptradewebproject.persistence.entities.UserEntity;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOCurrency;
 import com.mycompany.p2ptradewebproject.persistence.entities.CurrencyEntity;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.ResultSetMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,62 +14,31 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-public class CurrencyDAO implements IDAOCurrency {
+public class CurrencyDAO extends GenericDAO<CurrencyEntity> implements IDAOCurrency {
+
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static CurrencyDAO instance = null;
+    private AbstractDataSource dataSource;
+    private ResultSetMapper<CurrencyEntity> mapper;
 
     private static final String INSERT_CURRENCY = "INSERT INTO currency(name, code) VALUES(?,?)";
-    private static final String SELECT_CURRENCY = "SELECT * FROM currency WHERE id=?";
-    private static final String SELECT_ALL_CURRENCIES = "SELECT * FROM currency";
     private static final String UPDATE_CURRENCY = "UPDATE currency SET name=?, code=? WHERE id=?";
     private static final String DELETE_CURRENCY = "DELETE FROM currency WHERE id=?";
 
-    private AbstractDataSource dataSource;
 
-
-    private CurrencyDAO(AbstractDataSource dataSource) {
+    private CurrencyDAO(AbstractDataSource dataSource, ResultSetMapper<CurrencyEntity> mapper) {
+        super(dataSource, mapper);
         this.dataSource = dataSource;
+        this.mapper = mapper;
     }
 
-    public static synchronized CurrencyDAO getInstance(AbstractDataSource dataSource) {
+    public static synchronized CurrencyDAO getInstance(AbstractDataSource dataSource, ResultSetMapper<CurrencyEntity> mapper) {
         if (instance == null) {
-            instance = new CurrencyDAO(dataSource);
+            instance = new CurrencyDAO(dataSource, mapper);
         }
         return instance;
     }
 
-    @Override
-    public Optional<CurrencyEntity> findById(long id) {
-        Connection connection = dataSource.getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(SELECT_CURRENCY)) {
-            ps.setLong(1, id);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.of(mapResultSetToCurrencyEntity(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public List<CurrencyEntity> findAll() {
-        List<CurrencyEntity> result = new ArrayList<>();
-        Connection connection = dataSource.getConnection();
-        try (
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(SELECT_ALL_CURRENCIES)
-        ) {
-            while (resultSet.next()) {
-                result.add(mapResultSetToCurrencyEntity(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 
     @Override
     public void create(CurrencyEntity currencyEntity) {
@@ -76,7 +48,7 @@ public class CurrencyDAO implements IDAOCurrency {
             ps.setString(2, currencyEntity.getCode());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -89,7 +61,7 @@ public class CurrencyDAO implements IDAOCurrency {
             ps.setLong(3, currencyEntity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -100,15 +72,7 @@ public class CurrencyDAO implements IDAOCurrency {
             ps.setLong(1, currencyEntity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
-    }
-
-    private CurrencyEntity mapResultSetToCurrencyEntity(ResultSet resultSet) throws SQLException {
-        return new CurrencyEntity(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getString("code")
-        );
     }
 }

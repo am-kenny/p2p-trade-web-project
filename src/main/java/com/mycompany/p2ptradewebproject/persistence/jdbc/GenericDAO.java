@@ -99,6 +99,7 @@ public class GenericDAO<T> implements IGenericDAO<T> {
         List<T> resultList = new ArrayList<>();
         while (resultSet.next()) {
             T result = mapper.map(resultSet);
+            resultList.add(result);
         }
         return resultList;
     }

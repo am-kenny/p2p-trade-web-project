@@ -19,31 +19,9 @@ public class TradeEntity {
     private Timestamp repliedAt;
     private Timestamp closedAt;
 
-    public TradeEntity(Integer id, Integer initiatorUserId, Integer responderUserId, Boolean isSeller, Integer tradeCurrencyId, Float tradeCurrencyAmount, Integer exchangeCurrencyId, Float exchangeRate, TradeStatus status, Boolean isConfirmedByInitiator, Boolean isConfirmedByResponder, Timestamp createdAt, Timestamp repliedAt, Timestamp closedAt) {
-        this.id = id;
-        this.initiatorUserId = initiatorUserId;
-        this.responderUserId = responderUserId;
-        this.isSeller = isSeller;
-        this.tradeCurrencyId = tradeCurrencyId;
-        this.tradeCurrencyAmount = tradeCurrencyAmount;
-        this.exchangeCurrencyId = exchangeCurrencyId;
-        this.exchangeRate = exchangeRate;
-        this.status = status;
-        this.isConfirmedByInitiator = isConfirmedByInitiator;
-        this.isConfirmedByResponder = isConfirmedByResponder;
-        this.createdAt = createdAt;
-        this.repliedAt = repliedAt;
-        this.closedAt = closedAt;
-    }
 
-    public TradeEntity(Integer initiatorUserId, Boolean isSeller, Integer tradeCurrencyId, Float tradeCurrencyAmount, Integer exchangeCurrencyId, Float exchangeRate) {
-        this.initiatorUserId = initiatorUserId;
-        this.isSeller = isSeller;
-        this.tradeCurrencyId = tradeCurrencyId;
-        this.tradeCurrencyAmount = tradeCurrencyAmount;
-        this.exchangeCurrencyId = exchangeCurrencyId;
-        this.exchangeRate = exchangeRate;
-    }
+    public TradeEntity() {}
+
 
     public Integer getId() {
         return id;

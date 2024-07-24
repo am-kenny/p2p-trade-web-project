@@ -1,50 +1,40 @@
 package com.mycompany.p2ptradewebproject.persistence.entities;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+
 import java.util.Objects;
 
 public class FeedbackEntity {
     private Integer id;
-    private UserEntity author;
-    private TradeEntity trade;
+    private Integer authorId;
+    private Integer tradeId;
     private Boolean isPositive;
     private String text;
 
 
-    public FeedbackEntity(Integer id, UserEntity author, TradeEntity trade, Boolean isPositive, String text) {
-        this.id = id;
-        this.author = author;
-        this.trade = trade;
-        this.isPositive = isPositive;
-        this.text = text;
-    }
+    public FeedbackEntity() {}
 
-
-    public FeedbackEntity(UserEntity author, TradeEntity trade, Boolean isPositive, String text) {
-        this.author = author;
-        this.trade = trade;
-        this.isPositive = isPositive;
-        this.text = text;
-    }
 
     public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) {}
 
-    public UserEntity getAuthor() {
-        return author;
+    public Integer getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(UserEntity author) {
-        this.author = author;
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
     }
 
-    public TradeEntity getTrade() {
-        return trade;
+    public Integer getTradeId() {
+        return tradeId;
     }
 
-    public void setTrade(TradeEntity trade) {
-        this.trade = trade;
+    public void setTradeId(Integer tradeId) {
+        this.tradeId = tradeId;
     }
 
     public Boolean getIsPositive() {
@@ -67,8 +57,8 @@ public class FeedbackEntity {
     public String toString() {
         return "FeedbackEntity{" +
                 "id=" + id +
-                ", author=" + author +
-                ", trade=" + trade +
+                ", authorId=" + authorId +
+                ", trade=" + tradeId +
                 ", isPositive=" + isPositive +
                 ", text='" + text + '\'' +
                 '}';
@@ -79,11 +69,11 @@ public class FeedbackEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FeedbackEntity that = (FeedbackEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(author, that.author) && Objects.equals(trade, that.trade) && Objects.equals(isPositive, that.isPositive) && Objects.equals(text, that.text);
+        return Objects.equals(id, that.id) && Objects.equals(authorId, that.authorId) && Objects.equals(tradeId, that.tradeId) && Objects.equals(isPositive, that.isPositive) && Objects.equals(text, that.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, trade, isPositive, text);
+        return Objects.hash(id, authorId, tradeId, isPositive, text);
     }
 }

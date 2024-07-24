@@ -4,26 +4,25 @@ import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSourc
 import com.mycompany.p2ptradewebproject.persistence.connection.EDatabaseType;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.*;
 
-import java.util.function.Supplier;
-
 public abstract class AbstractDAOFactory {
-    public abstract AbstractDataSource getDataSource();
-    public abstract IDAOUser getUserDAO();
-    public abstract IDAOUserVerification getUserVerificationDAO();
-    public abstract IDAOBankAccount getBankAccountDAO();
-    public abstract IDAOBank getBankDAO();
-    public abstract IDAOCurrency getCurrencyDAO();
-    public abstract IDAOTrade getTradeDAO();
-    public abstract IDAOMessage getMessageDAO();
-    public abstract IDAOFeedback getFeedbackDAO();
-    public abstract <T> T doInTransaction(Supplier<T> operation);
 
-    public static AbstractDAOFactory getMySqlDAOFactory() {
-        return MySqlDAOFactory.getInstance(EDatabaseType.MYSQL);
-    }
-    public static AbstractDAOFactory getPostgreSqlDAOFactory() {
-        return null;
-    }
+    public abstract AbstractDataSource getDataSource();
+
+    public abstract IDAOUser createUserDAO();
+
+    public abstract IDAOUserVerification createUserVerificationDAO();
+
+    public abstract IDAOBankAccount createBankAccountDAO();
+
+    public abstract IDAOBank createBankDAO();
+
+    public abstract IDAOCurrency createCurrencyDAO();
+
+    public abstract IDAOTrade createTradeDAO();
+
+    public abstract IDAOMessage createMessageDAO();
+
+    public abstract IDAOFeedback createFeedbackDAO();
 
     public static AbstractDAOFactory createDAOFactory(EDatabaseType databaseType) {
         return switch (databaseType) {
