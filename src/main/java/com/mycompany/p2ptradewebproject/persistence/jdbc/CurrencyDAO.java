@@ -1,7 +1,8 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOCurrency;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOCurrency;
 import com.mycompany.p2ptradewebproject.persistence.entities.CurrencyEntity;
 
 import java.sql.*;
@@ -20,14 +21,14 @@ public class CurrencyDAO implements IDAOCurrency {
     private static final String UPDATE_CURRENCY = "UPDATE currency SET name=?, code=? WHERE id=?";
     private static final String DELETE_CURRENCY = "DELETE FROM currency WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
-    private CurrencyDAO(DataSource dataSource) {
+    private CurrencyDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized CurrencyDAO getInstance(DataSource dataSource) {
+    public static synchronized CurrencyDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new CurrencyDAO(dataSource);
         }
@@ -35,7 +36,7 @@ public class CurrencyDAO implements IDAOCurrency {
     }
 
     @Override
-    public Optional<CurrencyEntity> get(long id) {
+    public Optional<CurrencyEntity> findById(long id) {
         Connection connection = dataSource.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_CURRENCY)) {
             ps.setLong(1, id);
@@ -51,7 +52,7 @@ public class CurrencyDAO implements IDAOCurrency {
     }
 
     @Override
-    public List<CurrencyEntity> getAll() {
+    public List<CurrencyEntity> findAll() {
         List<CurrencyEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (

@@ -1,7 +1,8 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOBankAccount;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOBankAccount;
 import com.mycompany.p2ptradewebproject.persistence.entities.BankAccountEntity;
 
 import java.sql.*;
@@ -30,13 +31,13 @@ public class BankAccountDAO implements IDAOBankAccount {
     private static final String UPDATE_BANK = "UPDATE bank_account SET card_number=?, bank_id=?, user_id=?, currency_id=?, cardholder_name=? WHERE id=?";
     private static final String DELETE_BANK = "DELETE FROM bank_account WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
-    private BankAccountDAO(DataSource dataSource) {
+    private BankAccountDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized BankAccountDAO getInstance(DataSource dataSource) {
+    public static synchronized BankAccountDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new BankAccountDAO(dataSource);
         }
@@ -45,7 +46,7 @@ public class BankAccountDAO implements IDAOBankAccount {
 
 
     @Override
-    public Optional<BankAccountEntity> get(long id) {
+    public Optional<BankAccountEntity> findById(long id) {
         Connection connection = dataSource.getConnection();
         try (
                 PreparedStatement ps = connection.prepareStatement(SELECT_BANK_ACCOUNT)) {
@@ -64,7 +65,7 @@ public class BankAccountDAO implements IDAOBankAccount {
     }
 
     @Override
-    public List<BankAccountEntity> getAll() {
+    public List<BankAccountEntity> findAll() {
         List<BankAccountEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (
@@ -126,9 +127,9 @@ public class BankAccountDAO implements IDAOBankAccount {
         return new BankAccountEntity(
                 resultSet.getInt(ID_LABEL),
                 resultSet.getInt(CARD_NUMBER_LABEL),
-                BankDAO.getInstance(dataSource).get(resultSet.getInt(BANK_ID_LABEL)).orElseThrow(),
-                UserDAO.getInstance(dataSource).get(resultSet.getInt(USER_ID_LABEL)).orElseThrow(),
-                CurrencyDAO.getInstance(dataSource).get(resultSet.getInt(CURRENCY_ID_LABEL)).orElseThrow(),
+                BankDAO.getInstance(dataSource).findById(resultSet.getInt(BANK_ID_LABEL)).orElseThrow(),
+                UserDAO.getInstance(dataSource).findById(resultSet.getInt(USER_ID_LABEL)).orElseThrow(),
+                CurrencyDAO.getInstance(dataSource).findById(resultSet.getInt(CURRENCY_ID_LABEL)).orElseThrow(),
                 resultSet.getString(CARDHOLDER_NAME_LABEL)
         );
     }

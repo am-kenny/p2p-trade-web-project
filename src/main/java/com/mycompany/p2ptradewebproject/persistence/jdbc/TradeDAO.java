@@ -1,7 +1,8 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOTrade;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOTrade;
 import com.mycompany.p2ptradewebproject.persistence.entities.TradeEntity;
 import com.mycompany.p2ptradewebproject.persistence.entities.TradeStatus;
 
@@ -36,14 +37,14 @@ public class TradeDAO implements IDAOTrade {
     private static final String UPDATE_TRADE = "UPDATE trade SET responder_user_id=?, is_seller=?, trade_currency_id=?, trade_currency_amount=?, exchange_currency_id=?, exchange_rate=?, status=?, is_confirmed_by_initiator=?, is_confirmed_by_responder=? WHERE id=?";
     private static final String DELETE_TRADE = "DELETE FROM trade WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
-    private TradeDAO(DataSource dataSource) {
+    private TradeDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized TradeDAO getInstance(DataSource dataSource) {
+    public static synchronized TradeDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new TradeDAO(dataSource);
         }
@@ -51,7 +52,7 @@ public class TradeDAO implements IDAOTrade {
     }
 
     @Override
-    public Optional<TradeEntity> get(long id) {
+    public Optional<TradeEntity> findById(long id) {
         Connection connection = dataSource.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_TRADE)) {
             ps.setLong(1, id);
@@ -67,7 +68,7 @@ public class TradeDAO implements IDAOTrade {
     }
 
     @Override
-    public List<TradeEntity> getAll() {
+    public List<TradeEntity> findAll() {
         List<TradeEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (

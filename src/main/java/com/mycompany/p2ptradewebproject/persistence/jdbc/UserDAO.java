@@ -1,7 +1,8 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOUser;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOUser;
 import com.mycompany.p2ptradewebproject.persistence.entities.UserEntity;
 import com.mycompany.p2ptradewebproject.persistence.entities.UserVerificationEntity;
 
@@ -23,18 +24,19 @@ public class UserDAO implements IDAOUser {
 
     private static final String INSERT_USER = "INSERT INTO user(username, email, password) VALUES(?,?,?)";
     private static final String SELECT_USER = "SELECT * FROM user WHERE id=?";
+    private static final String SELECT_USER_BY_USERNAME_PASSWORD = "SELECT * FROM user WHERE username=? AND password=?";
     private static final String SELECT_ALL_USERS = "SELECT * FROM user";
     private static final String UPDATE_USER = "UPDATE user SET username=?,email=?,password=? WHERE id=?";
     private static final String DELETE_USER = "DELETE FROM user WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
-    private UserDAO(DataSource dataSource) {
+    private UserDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized UserDAO getInstance(DataSource dataSource) {
+    public static synchronized UserDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new UserDAO(dataSource);
         }
@@ -43,7 +45,7 @@ public class UserDAO implements IDAOUser {
 
 
     @Override
-    public Optional<UserEntity> get(long id) {
+    public Optional<UserEntity> findById(long id) {
         Connection connection = dataSource.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_USER)) {
             ps.setLong(1, id);
@@ -54,13 +56,31 @@ public class UserDAO implements IDAOUser {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
         return Optional.empty();
     }
 
     @Override
-    public List<UserEntity> getAll() {
+    public Optional<UserEntity> findByUsernamePassword(String username, String password) {
+        Connection connection = dataSource.getConnection();
+        try (PreparedStatement ps = connection.prepareStatement(SELECT_USER_BY_USERNAME_PASSWORD)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            try (ResultSet resultSet = ps.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return Optional.of(mapResultSetToUserEntity(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.severe(e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
         List<UserEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (
@@ -70,7 +90,7 @@ public class UserDAO implements IDAOUser {
                 result.add(mapResultSetToUserEntity(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
         return result;
     }
@@ -85,7 +105,7 @@ public class UserDAO implements IDAOUser {
             ps.executeUpdate();
 //            ResultSet genKeys = ps.getGeneratedKeys();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -99,7 +119,7 @@ public class UserDAO implements IDAOUser {
             ps.setLong(4, userEntity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -110,12 +130,12 @@ public class UserDAO implements IDAOUser {
             ps.setLong(1, userEntity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
     private UserEntity mapResultSetToUserEntity(ResultSet resultSet) throws SQLException {
-        Optional<UserVerificationEntity> userVerificationEntityOptional = UserVerificationDAO.getInstance(dataSource).get(resultSet.getInt(USER_VERIFICATION_ID_LABEL));
+        Optional<UserVerificationEntity> userVerificationEntityOptional = UserVerificationDAO.getInstance(dataSource).findById(resultSet.getInt(USER_VERIFICATION_ID_LABEL));
 
         return new UserEntity(
                 resultSet.getInt(ID_LABEL),

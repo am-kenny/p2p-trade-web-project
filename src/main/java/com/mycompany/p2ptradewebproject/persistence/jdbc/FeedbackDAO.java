@@ -1,8 +1,9 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.EDatabaseType;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOFeedback;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOFeedback;
 import com.mycompany.p2ptradewebproject.persistence.entities.FeedbackEntity;
 
 import java.sql.*;
@@ -27,14 +28,14 @@ public class FeedbackDAO implements IDAOFeedback {
     private static final String UPDATE_FEEDBACK = "UPDATE trade_feedback SET author_user_id=?, trade_id=?, is_positive=?, text=? WHERE id=?";
     private static final String DELETE_FEEDBACK = "DELETE FROM trade_feedback WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
-    private FeedbackDAO(DataSource dataSource) {
+    private FeedbackDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized FeedbackDAO getInstance(DataSource dataSource) {
+    public static synchronized FeedbackDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new FeedbackDAO(dataSource);
         }
@@ -42,7 +43,7 @@ public class FeedbackDAO implements IDAOFeedback {
     }
 
     @Override
-    public Optional<FeedbackEntity> get(long id) {
+    public Optional<FeedbackEntity> findById(long id) {
         Connection connection = dataSource.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_FEEDBACK)) {
             ps.setLong(1, id);
@@ -58,7 +59,7 @@ public class FeedbackDAO implements IDAOFeedback {
     }
 
     @Override
-    public List<FeedbackEntity> getAll() {
+    public List<FeedbackEntity> findAll() {
         List<FeedbackEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (
@@ -117,8 +118,8 @@ public class FeedbackDAO implements IDAOFeedback {
     private FeedbackEntity mapResultSetToFeedbackEntity(ResultSet resultSet) throws SQLException {
         return new FeedbackEntity(
                 resultSet.getInt(ID_LABEL),
-                UserDAO.getInstance(DataSource.getInstance(EDatabaseType.MYSQL)).get(resultSet.getInt(AUTHOR_USER_ID_LABEL)).orElseThrow(),
-                TradeDAO.getInstance(dataSource).get(resultSet.getInt(TRADE_ID_LABEL)).orElseThrow(),
+                UserDAO.getInstance(DataSource.getInstance(EDatabaseType.MYSQL)).findById(resultSet.getInt(AUTHOR_USER_ID_LABEL)).orElseThrow(),
+                TradeDAO.getInstance(dataSource).findById(resultSet.getInt(TRADE_ID_LABEL)).orElseThrow(),
                 resultSet.getBoolean(IS_POSITIVE_LABEL),
                 resultSet.getString(TEXT_LABEL)
         );

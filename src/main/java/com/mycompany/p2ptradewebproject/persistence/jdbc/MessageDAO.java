@@ -1,7 +1,8 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOMessage;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOMessage;
 import com.mycompany.p2ptradewebproject.persistence.entities.MessageEntity;
 
 import java.sql.*;
@@ -27,14 +28,14 @@ public class MessageDAO implements IDAOMessage {
     private static final String UPDATE_MESSAGE = "UPDATE trade_message SET user_id=?, trade_id=?, text=?, media=? WHERE id=?";
     private static final String DELETE_MESSAGE = "DELETE FROM trade_message WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
-    private MessageDAO(DataSource dataSource) {
+    private MessageDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized MessageDAO getInstance(DataSource dataSource) {
+    public static synchronized MessageDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new MessageDAO(dataSource);
         }
@@ -42,7 +43,7 @@ public class MessageDAO implements IDAOMessage {
     }
 
     @Override
-    public Optional<MessageEntity> get(long id) {
+    public Optional<MessageEntity> findById(long id) {
         Connection connection = dataSource.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_MESSAGE)) {
             ps.setLong(1, id);
@@ -58,7 +59,7 @@ public class MessageDAO implements IDAOMessage {
     }
 
     @Override
-    public List<MessageEntity> getAll() {
+    public List<MessageEntity> findAll() {
         List<MessageEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (
@@ -117,8 +118,8 @@ public class MessageDAO implements IDAOMessage {
     private MessageEntity mapResultSetToMessageEntity(ResultSet resultSet) throws SQLException {
         return new MessageEntity(
                 resultSet.getInt(ID_LABEL),
-                UserDAO.getInstance(dataSource).get(resultSet.getInt(USER_ID_LABEL)).orElseThrow(),
-                TradeDAO.getInstance(dataSource).get(resultSet.getInt(TRADE_ID_LABEL)).orElseThrow(),
+                UserDAO.getInstance(dataSource).findById(resultSet.getInt(USER_ID_LABEL)).orElseThrow(),
+                TradeDAO.getInstance(dataSource).findById(resultSet.getInt(TRADE_ID_LABEL)).orElseThrow(),
                 resultSet.getString(TEXT_LABEL),
                 resultSet.getString(MEDIA_LABEL),
                 resultSet.getTimestamp(CREATED_AT_LABEL)

@@ -1,7 +1,8 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOUserVerification;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOUserVerification;
 import com.mycompany.p2ptradewebproject.persistence.entities.UserVerificationEntity;
 
 import java.sql.*;
@@ -27,14 +28,14 @@ public class UserVerificationDAO implements IDAOUserVerification {
     private static final String UPDATE_USER_VERIFICATION = "UPDATE user_verification SET name=?, surname=?, passport_number=?, passport_photo_reference=?, is_banned=? WHERE id=?";
     private static final String DELETE_USER_VERIFICATION = "DELETE FROM user_verification WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
-    private UserVerificationDAO(DataSource dataSource) {
+    private UserVerificationDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized UserVerificationDAO getInstance(DataSource dataSource) {
+    public static synchronized UserVerificationDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new UserVerificationDAO(dataSource);
         }
@@ -43,7 +44,7 @@ public class UserVerificationDAO implements IDAOUserVerification {
 
 
     @Override
-    public Optional<UserVerificationEntity> get(long id) {
+    public Optional<UserVerificationEntity> findById(long id) {
 
         Connection connection = dataSource.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_USER_VERIFICATION)) {
@@ -70,7 +71,7 @@ public class UserVerificationDAO implements IDAOUserVerification {
     }
 
     @Override
-    public List<UserVerificationEntity> getAll() {
+    public List<UserVerificationEntity> findAll() {
         List<UserVerificationEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (

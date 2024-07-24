@@ -1,7 +1,8 @@
-package com.mycompany.p2ptradewebproject.persistence.dao;
+package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.IDAOBank;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOBank;
 import com.mycompany.p2ptradewebproject.persistence.entities.BankEntity;
 
 import java.sql.*;
@@ -20,14 +21,14 @@ public class BankDAO implements IDAOBank {
     private static final String UPDATE_BANK = "UPDATE bank SET name=? WHERE id=?";
     private static final String DELETE_BANK = "DELETE FROM bank WHERE id=?";
 
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
-    private BankDAO(DataSource dataSource) {
+    private BankDAO(AbstractDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public static synchronized BankDAO getInstance(DataSource dataSource) {
+    public static synchronized BankDAO getInstance(AbstractDataSource dataSource) {
         if (instance == null) {
             instance = new BankDAO(dataSource);
         }
@@ -35,7 +36,7 @@ public class BankDAO implements IDAOBank {
     }
 
     @Override
-    public Optional<BankEntity> get(long id) {
+    public Optional<BankEntity> findById(long id) {
         Connection connection = dataSource.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_BANK)) {
             ps.setLong(1, id);
@@ -51,7 +52,7 @@ public class BankDAO implements IDAOBank {
     }
 
     @Override
-    public List<BankEntity> getAll() {
+    public List<BankEntity> findAll() {
         List<BankEntity> result = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try (

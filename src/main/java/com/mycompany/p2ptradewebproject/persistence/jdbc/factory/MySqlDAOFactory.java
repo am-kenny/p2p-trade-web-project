@@ -1,19 +1,24 @@
-package com.mycompany.p2ptradewebproject.persistence.dao.factory;
+package com.mycompany.p2ptradewebproject.persistence.jdbc.factory;
 
+import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
 import com.mycompany.p2ptradewebproject.persistence.connection.EDatabaseType;
-import com.mycompany.p2ptradewebproject.persistence.dao.*;
+import com.mycompany.p2ptradewebproject.persistence.connection.TomcatDataSource;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.*;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class MySqlDAOFactory extends DAOFactory {
+public class MySqlDAOFactory extends AbstractDAOFactory {
     private static MySqlDAOFactory instance = null;
-    private DataSource dataSource;
+    private AbstractDataSource dataSource;
 
 
     private MySqlDAOFactory(EDatabaseType databaseType) {
-        this.dataSource = DataSource.getInstance(databaseType);
+        this.dataSource = switch (databaseType) {
+            case MYSQL -> DataSource.getInstance(databaseType);
+            case MYSQL_TOMCAT -> TomcatDataSource.getInstance(databaseType);
+        };
     }
 
     public static synchronized MySqlDAOFactory getInstance(EDatabaseType databaseType) {
@@ -28,7 +33,7 @@ public class MySqlDAOFactory extends DAOFactory {
     }
 
     @Override
-    public DataSource getDataSource() {
+    public AbstractDataSource getDataSource() {
         return dataSource;
     }
 
