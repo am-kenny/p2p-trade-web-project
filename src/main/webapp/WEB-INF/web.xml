@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
         <servlet-name>Servlet</servlet-name>
         <servlet-class>com.mycompany.p2ptradewebproject.servlet.Servlet</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>Counter</servlet-name>
         <servlet-class>com.mycompany.p2ptradewebproject.servlet.CounterServlet</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>Sync</servlet-name>
         <servlet-class>com.mycompany.p2ptradewebproject.servlet.SyncServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>com.mycompany.p2ptradewebproject.presentation.Controller</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
         <url-pattern>/</url-pattern>
@@ -24,6 +30,11 @@
         <servlet-name>Sync</servlet-name>
         <url-pattern>/sync</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/controller</url-pattern>
+    </servlet-mapping>
+
     <session-config>
         <session-timeout>
             30
