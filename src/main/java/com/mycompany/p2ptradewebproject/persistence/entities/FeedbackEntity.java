@@ -1,7 +1,5 @@
 package com.mycompany.p2ptradewebproject.persistence.entities;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-
 import java.util.Objects;
 
 public class FeedbackEntity {
@@ -19,7 +17,9 @@ public class FeedbackEntity {
         return id;
     }
 
-    public void setId(Integer id) {}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getAuthorId() {
         return authorId;

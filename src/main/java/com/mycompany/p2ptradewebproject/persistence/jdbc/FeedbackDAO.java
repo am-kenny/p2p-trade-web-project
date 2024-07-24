@@ -12,8 +12,7 @@ public class FeedbackDAO extends GenericDAO<FeedbackEntity> implements IDAOFeedb
 
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static FeedbackDAO instance = null;
-    private AbstractDataSource dataSource;
-    private ResultSetMapper<FeedbackEntity> mapper;
+    private final AbstractDataSource dataSource;
 
     private static final String INSERT_FEEDBACK = "INSERT INTO trade_feedback(author_user_id, trade_id, is_positive, text) VALUES(?,?,?,?)";
     private static final String UPDATE_FEEDBACK = "UPDATE trade_feedback SET author_user_id=?, trade_id=?, is_positive=?, text=? WHERE id=?";
@@ -23,7 +22,6 @@ public class FeedbackDAO extends GenericDAO<FeedbackEntity> implements IDAOFeedb
     private FeedbackDAO(AbstractDataSource dataSource, ResultSetMapper<FeedbackEntity> mapper) {
         super(dataSource, mapper);
         this.dataSource = dataSource;
-        this.mapper = mapper;
     }
 
     public static synchronized FeedbackDAO getInstance(AbstractDataSource dataSource, ResultSetMapper<FeedbackEntity> mapper) {

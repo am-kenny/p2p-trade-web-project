@@ -19,13 +19,13 @@ public class GenericDAO<T> implements IGenericDAO<T> {
 
     private static final int COLUMN_ID = 1;
 
-    private AbstractDataSource dataSource;
+    private final AbstractDataSource dataSource;
 
-     private ResultSetMapper<T> mapper;
+    private final ResultSetMapper<T> mapper;
 
     public GenericDAO(AbstractDataSource dataSource, ResultSetMapper<T> mapper) {
         this.dataSource = dataSource;
-         this.mapper = mapper;
+        this.mapper = mapper;
     }
 
 
@@ -46,6 +46,7 @@ public class GenericDAO<T> implements IGenericDAO<T> {
 
     @Override
     public List<T> findAll() {
+        System.out.println(mapper.getClass().getSimpleName());
         return findByDynamicSelect(mapper.getQuerySelectAll());
     }
 

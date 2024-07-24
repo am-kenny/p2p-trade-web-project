@@ -14,7 +14,7 @@ public class TomcatDataSource extends AbstractDataSource{
 
     private static final Logger LOGGER = Logger.getLogger(TomcatDataSource.class.getSimpleName());
     private static TomcatDataSource instance;
-    private DataSource ds;
+    private final DataSource ds;
     private Connection connection;
 
     private TomcatDataSource(EDatabaseType databaseType) {
@@ -62,7 +62,7 @@ public class TomcatDataSource extends AbstractDataSource{
                 connection.commit();
             } catch (Exception ex) {
                 connection.rollback();
-                throw new RuntimeException("Error during transaction. Transaction is rollbacked. ", ex);
+                throw new RuntimeException("Error during transaction. Transaction is rolled back. ", ex);
             } finally {
                 if (connection != null) {
                     connection.close();

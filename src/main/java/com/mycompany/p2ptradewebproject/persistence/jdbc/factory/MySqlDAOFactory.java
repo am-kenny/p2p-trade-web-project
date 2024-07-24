@@ -8,12 +8,11 @@ import com.mycompany.p2ptradewebproject.persistence.jdbc.*;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.*;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class MySqlDAOFactory extends AbstractDAOFactory {
 
     private static MySqlDAOFactory instance = null;
-    private AbstractDataSource dataSource;
+    private final AbstractDataSource dataSource;
 
 
     private MySqlDAOFactory(EDatabaseType databaseType) {

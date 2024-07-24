@@ -18,7 +18,9 @@ public class BankAccountEntity {
         return id;
     }
 
-    public void setId(Integer id) {}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getCardNumber() {
         return cardNumber;

@@ -20,7 +20,6 @@ public class Runner {
         IDAOBank bankDAO = daoFactory.createBankDAO();
         IDAOTrade tradeDAO = daoFactory.createTradeDAO();
         IDAOFeedback feedbackDAO = daoFactory.createFeedbackDAO();
-        IDAOMessage messageDAO = daoFactory.createMessageDAO();
 
 //        UserEntity newUser = new UserEntity("username", "email@example.com", "12345678");
 //        userDAO.create(newUser);

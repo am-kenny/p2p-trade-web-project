@@ -12,8 +12,7 @@ public class BankAccountDAO extends GenericDAO<BankAccountEntity> implements IDA
 
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static BankAccountDAO instance;
-    private AbstractDataSource dataSource;
-    private ResultSetMapper<BankAccountEntity> mapper;
+    private final AbstractDataSource dataSource;
 
     private static final String INSERT_BANK = "INSERT INTO bank_account(card_number, bank_id, user_id, currency_id, cardholder_name) VALUE(?,?,?,?,?)";
     private static final String UPDATE_BANK = "UPDATE bank_account SET card_number=?, bank_id=?, user_id=?, currency_id=?, cardholder_name=? WHERE id=?";
@@ -23,7 +22,6 @@ public class BankAccountDAO extends GenericDAO<BankAccountEntity> implements IDA
     private BankAccountDAO(AbstractDataSource dataSource, ResultSetMapper<BankAccountEntity> mapper) {
         super(dataSource, mapper);
         this.dataSource = dataSource;
-        this.mapper = mapper;
     }
 
     public static synchronized BankAccountDAO getInstance(AbstractDataSource dataSource, ResultSetMapper<BankAccountEntity> mapper) {

@@ -2,7 +2,6 @@ package com.mycompany.p2ptradewebproject.persistence.jdbc.mapper;
 
 import com.mycompany.p2ptradewebproject.persistence.entities.BankEntity;
 
-import javax.swing.tree.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

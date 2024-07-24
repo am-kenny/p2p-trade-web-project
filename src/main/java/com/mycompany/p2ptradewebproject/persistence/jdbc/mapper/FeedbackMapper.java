@@ -30,8 +30,8 @@ public class FeedbackMapper implements ResultSetMapper<FeedbackEntity> {
     public FeedbackEntity map(ResultSet resultSet) throws SQLException {
         FeedbackEntity feedback = new FeedbackEntity();
         feedback.setId(resultSet.getInt(ID_LABEL));
-//        feedback.setAuthor(); // TODO
-//        feedback.setTrade();
+        feedback.setAuthorId(resultSet.getInt(AUTHOR_USER_ID_LABEL));
+        feedback.setTradeId(resultSet.getInt(TRADE_ID_LABEL));
         feedback.setIsPositive(resultSet.getBoolean(IS_POSITIVE_LABEL));
         feedback.setText(resultSet.getString(TEXT));
 

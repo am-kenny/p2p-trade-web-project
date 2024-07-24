@@ -1,24 +1,18 @@
 package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
 import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
-import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.entities.UserEntity;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOUserVerification;
 import com.mycompany.p2ptradewebproject.persistence.entities.UserVerificationEntity;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.ResultSetMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 public class UserVerificationDAO extends GenericDAO<UserVerificationEntity> implements IDAOUserVerification {
 
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static UserVerificationDAO instance = null;
-    private AbstractDataSource dataSource;
-    private ResultSetMapper<UserVerificationEntity> mapper;
+    private final AbstractDataSource dataSource;
 
     private static final String INSERT_USER_VERIFICATION = "INSERT INTO user_verification(name, surname, passport_number, passport_photo_reference) VALUES(?,?,?,?)";
     private static final String UPDATE_USER_VERIFICATION = "UPDATE user_verification SET name=?, surname=?, passport_number=?, passport_photo_reference=?, is_banned=? WHERE id=?";
@@ -28,7 +22,6 @@ public class UserVerificationDAO extends GenericDAO<UserVerificationEntity> impl
     private UserVerificationDAO(AbstractDataSource dataSource, ResultSetMapper<UserVerificationEntity> mapper) {
         super(dataSource, mapper);
         this.dataSource = dataSource;
-        this.mapper = mapper;
     }
 
     public static synchronized UserVerificationDAO getInstance(AbstractDataSource dataSource, ResultSetMapper<UserVerificationEntity> mapper) {

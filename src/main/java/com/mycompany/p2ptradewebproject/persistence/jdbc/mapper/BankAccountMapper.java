@@ -32,9 +32,9 @@ public class BankAccountMapper implements ResultSetMapper<BankAccountEntity> {
         BankAccountEntity bankAccount = new BankAccountEntity();
         bankAccount.setId(resultSet.getInt(ID_LABEL));
         bankAccount.setCardNumber(resultSet.getInt(CARD_NUMBER_LABEL));
-//        bankAccount.setBank(); // TODO
-//        bankAccount.setUser();
-//        bankAccount.setCurrency();
+        bankAccount.setBankId(resultSet.getInt(BANK_ID_LABEL));
+        bankAccount.setUserId(resultSet.getInt(USER_ID_LABEL));
+        bankAccount.setCurrencyId(resultSet.getInt(CURRENCY_ID_LABEL));
         bankAccount.setCardholderName(resultSet.getString(CARD_HOLDER_NAME_LABEL));
 
         return bankAccount;

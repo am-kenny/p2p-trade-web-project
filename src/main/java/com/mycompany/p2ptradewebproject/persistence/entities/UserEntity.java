@@ -1,28 +1,18 @@
 package com.mycompany.p2ptradewebproject.persistence.entities;
 
+import java.sql.Timestamp;
+
 public class UserEntity {
     private Integer id;
     private String username;
     private String email;
     private String password;
     private Integer userVerificationId;
+    private Timestamp createdAt;
 
-
-    public UserEntity(Integer id, String username, String email, String password, Integer userVerificationId) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.userVerificationId = userVerificationId;
-    }
-
-    public UserEntity(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 
     public UserEntity() {}
+
 
     public Integer getId() {
         return id;
@@ -62,6 +52,14 @@ public class UserEntity {
 
     public void setUserVerificationId(Integer userVerificationId) {
         this.userVerificationId = userVerificationId;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
 

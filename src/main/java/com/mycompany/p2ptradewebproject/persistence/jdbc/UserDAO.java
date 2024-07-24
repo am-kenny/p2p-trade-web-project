@@ -1,16 +1,11 @@
 package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
 import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
-import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOUser;
 import com.mycompany.p2ptradewebproject.persistence.entities.UserEntity;
-import com.mycompany.p2ptradewebproject.persistence.entities.UserVerificationEntity;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.ResultSetMapper;
-import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.UserVerificationMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -18,8 +13,8 @@ public class UserDAO extends GenericDAO<UserEntity> implements IDAOUser {
 
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static UserDAO instance = null;
-    private AbstractDataSource dataSource;
-    private ResultSetMapper<UserEntity> mapper;
+    private final AbstractDataSource dataSource;
+    private final ResultSetMapper<UserEntity> mapper;
 
     private static final String INSERT_USER = "INSERT INTO user(username, email, password) VALUES(?,?,?)";
     private static final String UPDATE_USER = "UPDATE user SET username=?,email=?,password=? WHERE id=?";

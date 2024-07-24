@@ -12,8 +12,7 @@ public class MessageDAO extends GenericDAO<MessageEntity> implements IDAOMessage
 
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static MessageDAO instance = null;
-    private AbstractDataSource dataSource;
-    private ResultSetMapper<MessageEntity> mapper;
+    private final AbstractDataSource dataSource;
 
     private static final String INSERT_MESSAGE = "INSERT INTO trade_message(user_id, trade_id, text, media) VALUES(?,?,?,?)";
     private static final String UPDATE_MESSAGE = "UPDATE trade_message SET user_id=?, trade_id=?, text=?, media=? WHERE id=?";
@@ -23,7 +22,6 @@ public class MessageDAO extends GenericDAO<MessageEntity> implements IDAOMessage
     private MessageDAO(AbstractDataSource dataSource, ResultSetMapper<MessageEntity> mapper) {
         super(dataSource, mapper);
         this.dataSource = dataSource;
-        this.mapper = mapper;
     }
 
     public static synchronized MessageDAO getInstance(AbstractDataSource dataSource, ResultSetMapper<MessageEntity> mapper) {

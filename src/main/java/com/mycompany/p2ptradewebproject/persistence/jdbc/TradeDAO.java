@@ -1,25 +1,18 @@
 package com.mycompany.p2ptradewebproject.persistence.jdbc;
 
 import com.mycompany.p2ptradewebproject.persistence.connection.AbstractDataSource;
-import com.mycompany.p2ptradewebproject.persistence.connection.DataSource;
-import com.mycompany.p2ptradewebproject.persistence.entities.UserEntity;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.IDAOTrade;
 import com.mycompany.p2ptradewebproject.persistence.entities.TradeEntity;
-import com.mycompany.p2ptradewebproject.persistence.entities.TradeStatus;
 import com.mycompany.p2ptradewebproject.persistence.jdbc.mapper.ResultSetMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 public class TradeDAO extends GenericDAO<TradeEntity> implements IDAOTrade {
 
     private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getSimpleName());
     private static TradeDAO instance = null;
-    private AbstractDataSource dataSource;
-    private ResultSetMapper<TradeEntity> mapper;
+    private final AbstractDataSource dataSource;
 
     private static final String INSERT_TRADE = "INSERT INTO trade(initiator_user_id, is_seller, trade_currency_id, trade_currency_amount, exchange_currency_id, exchange_rate) VALUES(?,?,?,?,?,?)";
     private static final String UPDATE_TRADE = "UPDATE trade SET responder_user_id=?, is_seller=?, trade_currency_id=?, trade_currency_amount=?, exchange_currency_id=?, exchange_rate=?, status=?, is_confirmed_by_initiator=?, is_confirmed_by_responder=? WHERE id=?";
@@ -29,7 +22,6 @@ public class TradeDAO extends GenericDAO<TradeEntity> implements IDAOTrade {
     private TradeDAO(AbstractDataSource dataSource, ResultSetMapper<TradeEntity> mapper) {
         super(dataSource, mapper);
         this.dataSource = dataSource;
-        this.mapper = mapper;
     }
 
     public static synchronized TradeDAO getInstance(AbstractDataSource dataSource, ResultSetMapper<TradeEntity> mapper) {

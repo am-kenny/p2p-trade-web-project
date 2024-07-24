@@ -31,8 +31,8 @@ public class MessageMapper implements ResultSetMapper<MessageEntity> {
     public MessageEntity map(ResultSet resultSet) throws SQLException {
         MessageEntity message = new MessageEntity();
         message.setId(resultSet.getInt(ID_LABEL));
-//        message.setUser(); // TODO
-//        message.setTrade();
+        message.setUserId(resultSet.getInt(USER_ID_LABEL));
+        message.setTradeId(resultSet.getInt(TRADE_ID_LABEL));
         message.setText(resultSet.getString(TEXT_LABEL));
         message.setMedia(resultSet.getString(MEDIA_LABEL));
         message.setCreatedAt(resultSet.getTimestamp(CREATED_AT_LABEL));

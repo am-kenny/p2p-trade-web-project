@@ -33,6 +33,8 @@ public class UserMapper implements ResultSetMapper<UserEntity> {
         user.setUsername(resultSet.getString(USERNAME_LABEL));
         user.setEmail(resultSet.getString(EMAIL_LABEL));
         user.setPassword(resultSet.getString(PASSWORD_LABEL));
+        user.setUserVerificationId(resultSet.getInt(USER_VERIFICATION_ID_LABEL));
+        user.setCreatedAt(resultSet.getTimestamp(CREATED_AT_LABEL));
 
         return user;
     }

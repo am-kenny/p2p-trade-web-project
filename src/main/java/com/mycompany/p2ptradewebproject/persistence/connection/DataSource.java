@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 public class DataSource extends AbstractDataSource {
     private static final Logger LOGGER = Logger.getLogger(DataSource.class.getSimpleName());
     private static DataSource instance = null;
-    private String url;
-    private String user;
-    private String password;
+    private final String url;
+    private final String user;
+    private final String password;
     private Connection connection;
 
     static { //TODO: ASK IN THE CLASS WHY IT IS NEEDED IN TOMCAT
@@ -63,7 +63,7 @@ public class DataSource extends AbstractDataSource {
                 connection.commit();
             } catch (Exception ex) {
                 connection.rollback();
-                throw new RuntimeException("Error during transaction. Transaction is rollbacked. " + ex);
+                throw new RuntimeException("Error during transaction. Transaction is rolled back. " + ex);
             } finally {
                 if (connection!=null) {
                     connection.close();
