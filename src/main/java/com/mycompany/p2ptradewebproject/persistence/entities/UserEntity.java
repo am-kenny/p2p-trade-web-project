@@ -22,6 +22,8 @@ public class UserEntity {
         this.password = password;
     }
 
+    public UserEntity() {}
+
     public Integer getId() {
         return id;
     }
@@ -52,6 +54,9 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public UserVerificationEntity getUserVerification() {
+        return userVerificationEntity;
     }
 
     public UserVerificationEntity getUserVerificationEntity() {

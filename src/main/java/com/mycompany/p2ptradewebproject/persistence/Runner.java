@@ -1,8 +1,8 @@
 package com.mycompany.p2ptradewebproject.persistence;
 
-import com.mycompany.p2ptradewebproject.persistence.dao.factory.DAOFactory;
-import com.mycompany.p2ptradewebproject.persistence.dao.factory.MySqlDAOFactory;
-import com.mycompany.p2ptradewebproject.persistence.dao.interfaces.*;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.factory.AbstractDAOFactory;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.factory.MySqlDAOFactory;
+import com.mycompany.p2ptradewebproject.persistence.jdbc.interfaces.*;
 import com.mycompany.p2ptradewebproject.persistence.entities.*;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Optional;
 public class Runner {
     public static void main(String[] args) {
         // DAO Factories
-        DAOFactory daoFactory = DAOFactory.getMySqlDAOFactory();
+        AbstractDAOFactory daoFactory = AbstractDAOFactory.getMySqlDAOFactory();
         IDAOUser userDAO = daoFactory.getUserDAO();
         IDAOCurrency currencyDAO = daoFactory.getCurrencyDAO();
         IDAOBank bankDAO = daoFactory.getBankDAO();
@@ -46,10 +46,10 @@ public class Runner {
 
 
         // Separate transactions
-        List<UserEntity> userRes = userDAO.getAll();
-        Optional<UserEntity> optionalUser = userDAO.get(1);
-        List<CurrencyEntity> currencyRes = currencyDAO.getAll();
-        List<BankEntity> bankRes = bankDAO.getAll();
+        List<UserEntity> userRes = userDAO.findAll();
+        Optional<UserEntity> optionalUser = userDAO.findById(1);
+        List<CurrencyEntity> currencyRes = currencyDAO.findAll();
+        List<BankEntity> bankRes = bankDAO.findAll();
         List<TradeEntity> tradeRes = new ArrayList<>();
         List<FeedbackEntity> feedbackRes = new ArrayList<>();
 
@@ -57,8 +57,8 @@ public class Runner {
         MySqlDAOFactory
                 .getMySqlDAOFactory()
                 .doInTransaction(() -> {
-                    tradeRes.addAll(tradeDAO.getAll());
-                    feedbackRes.addAll(feedbackDAO.getAll());
+                    tradeRes.addAll(tradeDAO.findAll());
+                    feedbackRes.addAll(feedbackDAO.findAll());
                     return true;
                 });
 
